@@ -3,20 +3,31 @@
 
 from flask import Flask, render_template, redirect, url_for, request
 import subprocess
+import sh
 
 # init app
 app = Flask(__name__)
 
 
-# route
 @app.route('/')
 def home():
-    return "home page"
+    return sh.pwd()
+
+
+@app.route('/start')
+def start():
+    return render_template('install_ansible.html')
+
+
+@app.route('/install')
+def install_ansible():
+    msg = subprocess.check_output('pip install ansible', shell=True)
+    return msg
 
 
 @app.route('/ls')
 def get_list():
-    msg = subprocess.check_output ('pip install ansible', shell=True)
+    msg = subprocess.check_output ('ls -al', shell=True)
     return msg
 
 
