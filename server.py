@@ -1,9 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3.7
 # coding: utf-8
 
 from flask import Flask, render_template, redirect, url_for, request
 import subprocess
-import sh
+#import sh
 
 # init app
 app = Flask(__name__)
@@ -11,18 +11,23 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return sh.pwd()
-
-
-@app.route('/start')
-def start():
-    return render_template('install_ansible.html')
+    # msg = sh.pwd()
+    msg = 'Home page'
+    return str(msg)
 
 
 @app.route('/install')
 def install_ansible():
     msg = subprocess.check_output('pip install ansible', shell=True)
     return msg
+
+@app.route('/start', methods=['GET', 'POST'])
+def start():
+    msg = None
+    if request.method == 'POST':
+        #redirect(url_for('install_ansible'))
+        msg = subprocess.check_output('pip install ansible', shell=True)
+    return render_template('install_ansible.html', msg=msg)
 
 
 @app.route('/ls')

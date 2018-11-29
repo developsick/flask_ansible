@@ -5,6 +5,12 @@
     <title>Install Ansible</title>
 </head>
 <body>
-    <a href="127.0.0.1:5000/install">Install</a>
+    <form action="" method="post">
+        <input type="submit" value="install">
+    </form>
+    {% if msg %}
+    <p><strong>msg: </strong>{{ msg }}</p>
+    <a href="http://localhost:5000/ls">ls</a>
+    {% endif %}
 </body>
 </html>
