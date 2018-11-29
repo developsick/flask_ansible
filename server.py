@@ -3,10 +3,19 @@
 
 from flask import Flask, render_template, redirect, url_for, request
 import subprocess
-#import sh
+import sh
+
+#initialize global variables
+port = 5000
+host = 'http://127.0.0.1:'+str(port)
+
 
 # init app
 app = Flask(__name__)
+
+
+def get_href(prefix, addr, refstr):
+    return prefix + "<a href=\"" + addr + "\">" + refstr + "</a>"
 
 
 @app.route('/')
@@ -33,7 +42,15 @@ def start():
 @app.route('/ls')
 def get_list():
     msg = subprocess.check_output ('ls -al', shell=True)
-    return msg
+    return msg + get_href('<br/><br/>', host+'/pwd', 'pwd')
+    # '''
+    # <br/><br/><a href="http://localhost:5000/pwd">pwd</a>
+    # '''
+
+
+@app.route('/pwd')
+def get_pwd():
+    return str(sh.pwd())
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,6 +71,6 @@ def get_pass():
 
 # start server
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=port, debug=True)
 else:
     print("server init fail")
